@@ -10,8 +10,9 @@ class CustomHttp {
     http.Client(),
   );
 
-  factory CustomHttp.instance({http.Client? client}) =>
-      client != null ? CustomHttp._internal(client) : _instance;
+  factory CustomHttp.instance({http.Client? client}) {
+    return client != null ? CustomHttp._internal(client) : _instance;
+  }
 
   String? _token;
 

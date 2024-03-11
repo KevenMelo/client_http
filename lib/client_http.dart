@@ -12,6 +12,7 @@ export 'dart:io';
 ///SRC
 export './src/response_error.dart';
 export './src/response_handler.dart';
+export './src/custom_http.dart';
 
 ///TYPEDEF
 export './src/models/typedef.dart';
