@@ -11,29 +11,29 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+    Client_http
+
+Pacote para solicitações https com gerenciamento de tokens internos.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+Solicitações https com gerenciamento interno de tokens, possibilidade de fornecimento de http.client.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Requisitos
+sdk: ">=3.3.0 <4.0.0"
+flutter: ">=1.17.0"
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+adicione ao pubspec.yaml o seguinte em dependencies:
 
-```dart
-const like = 'sample';
-```
+    client_http:
+      git:
+        url: https://github.com/KevenMelo/client_http
+        ref: latest-version
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+Pacote para uso interno dos sistemas e aplicativos carajás.
