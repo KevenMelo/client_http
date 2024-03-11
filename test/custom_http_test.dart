@@ -2,13 +2,18 @@ import 'package:client_http/src/custom_http.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:client_http/client_http.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import './custom_http_test.mocks.dart';
 
+@GenerateMocks([http.Client])
 void main() {
   group('CustomHttp', () {
     late CustomHttp customHttp;
-
+    late MockClient client;
     setUp(() {
-      customHttp = CustomHttp.instance();
+      client = MockClient();
+      customHttp = CustomHttp.instance(client: client);
     });
 
     test('setToken should set the token', () {
@@ -27,13 +32,15 @@ void main() {
       expect(customHttp.token, isNull);
     });
 
-    test('get should make a GET request', () async {
-      const url = 'https://example.com/api/data';
-      final response = http.Response('{"ok": true}', 200);
-      final httpClient = MockHttpClient(response);
-
+    test('get should make a sucess GET request', () async {
+      String? token;
+      Response response = http.Response('{"data": "my_data"}', 200);
+      when(client.get(Uri.parse('${Environment.dev.url}/test'), headers: {
+        'Content-Type': 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token'
+      })).thenAnswer((_) async => response);
       final customResponse = await customHttp.get<String>(
-        url: url,
+        url: '/test',
         headers: {'Content-Type': 'application/json'},
         parserMap: (json) => json['data'] as String,
         logger: (url, startTime,
@@ -44,27 +51,31 @@ void main() {
         timeLimit: const Duration(seconds: 5),
       );
 
-      expect(customResponse.hasError, true);
+      expect(customResponse.hasError, false);
       expect(customResponse.result, isA<String>());
     });
 
-    // Add more tests for other methods if needed
+    test('get should make a error GET request', () async {
+      String? token;
+      Response response = http.Response('error generic', 400);
+      when(client.get(Uri.parse('${Environment.dev.url}/test'), headers: {
+        'Content-Type': 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token'
+      })).thenAnswer((_) async => response);
+      final customResponse = await customHttp.get<String>(
+        url: '/test',
+        headers: {'Content-Type': 'application/json'},
+        parserMap: (json) => json['error'] as String,
+        logger: (url, startTime,
+            {end, time, response, body, error, stackTrace}) {},
+        baseUrl: Environment.dev,
+        logCall: true,
+        logResponse: true,
+        timeLimit: const Duration(seconds: 5),
+      );
+
+      expect(customResponse.hasError, true);
+      expect(customResponse.result, null);
+    });
   });
-}
-
-class MockHttpClient extends http.BaseClient {
-  final http.Response response;
-
-  MockHttpClient(this.response);
-
-  @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) async {
-    return http.StreamedResponse(
-      http.ByteStream.fromBytes(response.bodyBytes),
-      response.statusCode,
-      headers: response.headers,
-      reasonPhrase: response.reasonPhrase,
-      request: request,
-    );
-  }
 }

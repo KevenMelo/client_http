@@ -2,11 +2,16 @@ import 'package:client_http/client_http.dart';
 import 'package:http/http.dart' as http;
 
 class CustomHttp {
-  CustomHttp._internal();
+  CustomHttp._internal(http.Client client) : _client = client;
 
-  static final CustomHttp _instance = CustomHttp._internal();
+  final http.Client _client;
 
-  factory CustomHttp.instance() => _instance;
+  static final CustomHttp _instance = CustomHttp._internal(
+    http.Client(),
+  );
+
+  factory CustomHttp.instance({http.Client? client}) =>
+      client != null ? CustomHttp._internal(client) : _instance;
 
   String? _token;
 
@@ -48,7 +53,7 @@ class CustomHttp {
       }
       if (logCall && logger != null) logger(url, startTime);
 
-      final response = await http
+      final response = await _client
           .get(
             Uri.parse("${baseUrl.url}$url"),
             headers: headers,
@@ -71,7 +76,7 @@ class CustomHttp {
           response: response.body,
         );
       }
-      final body = json.decode(utf8.decode(response.bodyBytes));
+      final body = json.decode(response.body);
       if ((body["ok"] ?? false) || response.statusCode < 400) {
         return CustomResponse.ok(
           body,
@@ -80,9 +85,9 @@ class CustomHttp {
         );
       } else {
         return CustomResponse.error(
-          description: body["description"],
-          technicalDescription: body["technicalDescription"],
-          errorCode: body["errorCode"],
+          description: body["description"] ?? body,
+          technicalDescription: body["technicalDescription"] ?? body,
+          errorCode: response.statusCode,
           errorType: ErrorType.requestError,
         );
       }
@@ -99,6 +104,7 @@ class CustomHttp {
       }
       return CustomResponse.error(
         description: 'Tempo de requisição excedido',
+        errorCode: 408,
         errorType: ErrorType.timeOut,
       );
     } catch (e, trace) {
@@ -114,6 +120,7 @@ class CustomHttp {
       }
       return CustomResponse.error(
         description: e.toString(),
+        errorCode: 500,
         errorType: ErrorType.applicationError,
       );
     }
@@ -143,7 +150,7 @@ class CustomHttp {
       }
       if (logCall && logger != null) logger(url, startTime, body: bodyReq);
 
-      final response = await http
+      final response = await _client
           .post(
             Uri.parse("${baseUrl.url}$url"),
             headers: headers,
@@ -240,7 +247,7 @@ class CustomHttp {
       }
       if (logCall && logger != null) logger(url, startTime, body: bodyReq);
 
-      final response = await http
+      final response = await _client
           .post(
             Uri.parse("${baseUrl.url}$url"),
             headers: headers,
@@ -337,7 +344,7 @@ class CustomHttp {
       }
       if (logCall && logger != null) logger(url, startTime, body: bodyReq);
 
-      final response = await http
+      final response = await _client
           .post(
             Uri.parse("${baseUrl.url}$url"),
             headers: headers,
@@ -433,7 +440,7 @@ class CustomHttp {
       }
       if (logCall && logger != null) logger(url, startTime, body: bodyReq);
 
-      final response = await http
+      final response = await _client
           .post(
             Uri.parse("${baseUrl.url}$url"),
             headers: headers,
