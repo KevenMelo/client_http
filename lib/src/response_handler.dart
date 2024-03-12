@@ -21,10 +21,13 @@ class CustomResponse<T> {
     assert(parserMap != null || parserList != null,
         'You must provide a parser for the response');
 
-    return CustomResponse._(
-        hasError: false,
-        result: parserMap!((body["result"] ?? body)) ??
-            parserList!(body["result"] ?? body));
+    if (parserMap == null && parserList == null) {
+      throw Exception('Função para parsear a resposta não foi fornecida.');
+    }
+    T? res = parserMap != null
+        ? parserMap((body["result"] ?? body))
+        : parserList!((body["result"] ?? body));
+    return CustomResponse._(hasError: false, result: res);
   }
 
   factory CustomResponse.error(
