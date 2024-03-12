@@ -16,7 +16,7 @@ class CustomHttp {
   /// Construtor factory para retornar a instância da classe,
   /// podendo ser passado um client customizado,
   /// que implemente a interface [HttpClientInterface].
-  /// Caso não seja passado um client, será retornado a instância padrão.
+  /// Caso não seja passado um client, será usado um client http padrão.
 
   factory CustomHttp.instance({HttpClientInterface? client}) {
     return client != null ? CustomHttp._internal(client) : _instance;
