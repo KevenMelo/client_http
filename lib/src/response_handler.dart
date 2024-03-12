@@ -24,6 +24,9 @@ class CustomResponse<T> {
     if (parserMap == null && parserList == null) {
       throw Exception('Função para parsear a resposta não foi fornecida.');
     }
+    if (body["result"] == null) {
+      return CustomResponse._(hasError: false, result: body["result"]);
+    }
     T? res = parserMap != null
         ? parserMap((body["result"] ?? body))
         : parserList!((body["result"] ?? body));
