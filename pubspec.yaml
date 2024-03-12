@@ -1,6 +1,6 @@
 name: client_http
 description: "A new client_http project developed for the Carajás group's internal systems."
-version: 1.0.0+1
+version: 1.0.1+1
 homepage:
 
 environment:
