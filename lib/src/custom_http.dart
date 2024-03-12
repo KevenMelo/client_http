@@ -5,20 +5,20 @@ import 'client_http_impl.dart';
 /// classe singleton para realizar às requisições http
 
 class CustomHttp {
-  CustomHttp._internal(HttpClientInterface client) : _client = client;
+  CustomHttp._internal(Client client) : _client = client;
 
-  final HttpClientInterface _client;
+  final Client _client;
 
   static final CustomHttp _instance = CustomHttp._internal(
-    HttpClientImpl(),
+    ClientImpl(),
   );
 
   /// Construtor factory para retornar a instância da classe,
   /// podendo ser passado um client customizado,
-  /// que implemente a interface [HttpClientInterface].
+  /// que implemente a interface [Client].
   /// Caso não seja passado um client, será usado um client http padrão.
 
-  factory CustomHttp.instance({HttpClientInterface? client}) {
+  factory CustomHttp.instance({Client? client}) {
     return client != null ? CustomHttp._internal(client) : _instance;
   }
 
@@ -83,7 +83,7 @@ class CustomHttp {
       final response = await _client
           .get(
             Uri.parse("${baseUrl.url}$url"),
-            options: headers,
+            headers: headers,
           )
           .timeout(timeLimit);
 
@@ -196,7 +196,7 @@ class CustomHttp {
       final response = await _client
           .post(
             Uri.parse("${baseUrl.url}$url"),
-            options: headers,
+            headers: headers,
             body: jsonEncode(bodyReq),
           )
           .timeout(timeLimit);
@@ -309,7 +309,7 @@ class CustomHttp {
       final response = await _client
           .post(
             Uri.parse("${baseUrl.url}$url"),
-            options: headers,
+            headers: headers,
             body: jsonEncode(bodyReq),
           )
           .timeout(timeLimit);
@@ -422,7 +422,7 @@ class CustomHttp {
       final response = await _client
           .post(
             Uri.parse("${baseUrl.url}$url"),
-            options: headers,
+            headers: headers,
             body: jsonEncode(bodyReq),
           )
           .timeout(timeLimit);
@@ -534,7 +534,7 @@ class CustomHttp {
       final response = await _client
           .post(
             Uri.parse("${baseUrl.url}$url"),
-            options: headers,
+            headers: headers,
             body: jsonEncode(bodyReq),
           )
           .timeout(timeLimit);

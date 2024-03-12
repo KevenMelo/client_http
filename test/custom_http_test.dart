@@ -1,5 +1,4 @@
 import 'package:client_http/src/custom_http.dart';
-import 'package:client_http/src/models/interface/client_http_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:client_http/client_http.dart';
@@ -10,14 +9,14 @@ import 'custom_http_test.mocks.dart';
 
 // @GenerateMocks([HttpClientInterface])
 @GenerateNiceMocks([
-  MockSpec<HttpClientInterface>(),
+  MockSpec<Client>(),
 ])
 void main() {
   group('CustomHttp', () {
     late CustomHttp customHttp;
-    late MockHttpClientInterface client;
+    late MockClient client;
     setUp(() {
-      client = MockHttpClientInterface();
+      client = MockClient();
       customHttp = CustomHttp.instance(client: client);
     });
 
@@ -40,7 +39,7 @@ void main() {
     test('get should make a sucess GET request', () async {
       String? token;
       Response response = http.Response('{"data": "my_data"}', 200);
-      when(client.get(Uri.parse('${Environment.dev.url}/test'), options: {
+      when(client.get(Uri.parse('${Environment.dev.url}/test'), headers: {
         'Content-Type': 'application/json',
         HttpHeaders.authorizationHeader: 'Bearer $token'
       })).thenAnswer((_) async => response);
@@ -63,7 +62,7 @@ void main() {
     test('get should make a error GET request', () async {
       String? token;
       Response response = http.Response('error generic', 400);
-      when(client.get(Uri.parse('${Environment.dev.url}/test'), options: {
+      when(client.get(Uri.parse('${Environment.dev.url}/test'), headers: {
         'Content-Type': 'application/json',
         HttpHeaders.authorizationHeader: 'Bearer $token'
       })).thenAnswer((_) async => response);
