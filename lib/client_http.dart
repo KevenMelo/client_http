@@ -17,5 +17,8 @@ export './src/custom_http.dart';
 ///TYPEDEF
 export './src/models/typedef.dart';
 
+///INTERFACE
+export './src/models/interface/client_http_interface.dart';
+
 ///ENUM
 export './src/models/enviroment_enum.dart';
