@@ -47,4 +47,8 @@ class CustomResponse<T> {
           errorType: errorType),
     );
   }
+
+  factory CustomResponse.sucess() {
+    return CustomResponse._(hasError: false);
+  }
 }
