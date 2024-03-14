@@ -5,10 +5,12 @@ import 'client_http_impl.dart';
 /// classe singleton para realizar às requisições http
 
 class CustomHttp {
-  CustomHttp._internal(Client client) : _client = client;
+  CustomHttp._internal(Client client, [bool? retry])
+      : _client = client,
+        _retry = retry ?? true;
 
   final Client _client;
-
+  bool _retry = false;
   static final CustomHttp _instance = CustomHttp._internal(
     ClientImpl(),
   );
@@ -90,7 +92,7 @@ class CustomHttp {
       if (response.headers.containsKey('token')) {
         final token = response.headers['token'];
         if (token != null) {
-          _token = token;
+          setToken(token);
         }
       }
 
@@ -144,6 +146,14 @@ class CustomHttp {
           error: e,
           stackTrace: trace,
         );
+      }
+
+      if (_retry) {
+        get(
+            url: url,
+            headers: headers,
+            parserMap: parserMap,
+            parserList: parserList);
       }
       return CustomResponse.error(
         description: e.toString(),
@@ -203,7 +213,7 @@ class CustomHttp {
       if (response.headers.containsKey('token')) {
         final token = response.headers['token'];
         if (token != null) {
-          _token = token;
+          setToken(token);
         }
       }
       if (logResponse && logger != null) {
@@ -316,7 +326,7 @@ class CustomHttp {
       if (response.headers.containsKey('token')) {
         final token = response.headers['token'];
         if (token != null) {
-          _token = token;
+          setToken(token);
         }
       }
       if (logResponse && logger != null) {
@@ -429,7 +439,7 @@ class CustomHttp {
       if (response.headers.containsKey('token')) {
         final token = response.headers['token'];
         if (token != null) {
-          _token = token;
+          setToken(token);
         }
       }
       if (logResponse && logger != null) {
@@ -541,7 +551,7 @@ class CustomHttp {
       if (response.headers.containsKey('token')) {
         final token = response.headers['token'];
         if (token != null) {
-          _token = token;
+          setToken(token);
         }
       }
       if (logResponse && logger != null) {
