@@ -25,11 +25,12 @@ class CustomResponse<T> {
       throw Exception('Função para parsear a resposta não foi fornecida.');
     }
     if (body["result"] == null) {
-      return CustomResponse._(hasError: false, result: body["result"]);
+      return CustomResponse._(hasError: false, result: body);
     }
+    print(body["result"]);
     T? res = parserMap != null
-        ? parserMap((body["result"] ?? body))
-        : parserList!((body["result"] ?? body));
+        ? parserMap(body["result"] ?? body)
+        : parserList!(body["result"] ?? body);
     return CustomResponse._(hasError: false, result: res);
   }
 

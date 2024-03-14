@@ -38,7 +38,7 @@ void main() {
 
     test('get should make a sucess GET request', () async {
       String? token;
-      Response response = http.Response('{"data": "my_data"}', 200);
+      Response response = http.Response('{"result": "my_data"}', 200);
       when(client.get(Uri.parse('${Environment.dev.url}/test'), headers: {
         'Content-Type': 'application/json',
         HttpHeaders.authorizationHeader: 'Bearer $token'
@@ -46,10 +46,10 @@ void main() {
       final customResponse = await customHttp.get<String>(
         url: '/test',
         headers: {'Content-Type': 'application/json'},
-        parserMap: (json) => json['data'] as String,
+        parserMap: (json) => json["result"] as String,
         logger: (url, startTime,
             {end, time, response, body, error, stackTrace}) {},
-        baseUrl: Environment.dev,
+        customBaseUrl: Environment.dev,
         logCall: true,
         logResponse: true,
         timeLimit: const Duration(seconds: 5),
@@ -72,7 +72,7 @@ void main() {
         parserMap: (json) => json['error'] as String,
         logger: (url, startTime,
             {end, time, response, body, error, stackTrace}) {},
-        baseUrl: Environment.dev,
+        customBaseUrl: Environment.dev,
         logCall: true,
         logResponse: true,
         timeLimit: const Duration(seconds: 5),
