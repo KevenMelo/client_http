@@ -5,12 +5,17 @@ import 'client_http_impl.dart';
 /// classe singleton para realizar às requisições http
 
 class CustomHttp {
-  CustomHttp._internal(Client client, [bool? retry])
+  CustomHttp._internal(Client client, [bool? retry, String? baseUrl])
       : _client = client,
+        baseUrl = baseUrl ??
+            (kDebugMode ? Environment.dev.url : Environment.production.url),
         _retry = retry ?? true;
 
   final Client _client;
   bool _retry = false;
+
+  String baseUrl;
+
   static final CustomHttp _instance = CustomHttp._internal(
     ClientImpl(),
   );
@@ -65,7 +70,7 @@ class CustomHttp {
     ParserFunctionMap<T>? parserMap,
     ParserFunctionList<T>? parserList,
     LoggerFunction? logger,
-    Environment baseUrl = kDebugMode ? Environment.dev : Environment.production,
+    Environment? customBaseUrl,
     bool logCall = false,
     bool logResponse = false,
     Duration timeLimit = const Duration(seconds: 275),
@@ -84,7 +89,8 @@ class CustomHttp {
 
       final response = await _client
           .get(
-            Uri.parse("${baseUrl.url}$url"),
+            Uri.parse(
+                "${customBaseUrl != null ? customBaseUrl.url : baseUrl}$url"),
             headers: headers,
           )
           .timeout(timeLimit);
@@ -185,7 +191,7 @@ class CustomHttp {
     ParserFunctionMap<T>? parserMap,
     ParserFunctionList<T>? parserList,
     LoggerFunction? logger,
-    Environment baseUrl = kDebugMode ? Environment.dev : Environment.production,
+    Environment? customBaseUrl,
     bool logCall = false,
     bool logResponse = false,
     Duration timeLimit = const Duration(seconds: 275),
@@ -205,7 +211,8 @@ class CustomHttp {
 
       final response = await _client
           .post(
-            Uri.parse("${baseUrl.url}$url"),
+            Uri.parse(
+                "${customBaseUrl != null ? customBaseUrl.url : baseUrl}$url"),
             headers: headers,
             body: jsonEncode(bodyReq),
           )
@@ -298,7 +305,7 @@ class CustomHttp {
     ParserFunctionMap<T>? parserMap,
     ParserFunctionList<T>? parserList,
     LoggerFunction? logger,
-    Environment baseUrl = kDebugMode ? Environment.dev : Environment.production,
+    Environment? customBaseUrl,
     bool logCall = false,
     bool logResponse = false,
     Duration timeLimit = const Duration(seconds: 275),
@@ -318,7 +325,8 @@ class CustomHttp {
 
       final response = await _client
           .post(
-            Uri.parse("${baseUrl.url}$url"),
+            Uri.parse(
+                "${customBaseUrl != null ? customBaseUrl.url : baseUrl}$url"),
             headers: headers,
             body: jsonEncode(bodyReq),
           )
@@ -411,7 +419,7 @@ class CustomHttp {
     ParserFunctionMap<T>? parserMap,
     ParserFunctionList<T>? parserList,
     LoggerFunction? logger,
-    Environment baseUrl = kDebugMode ? Environment.dev : Environment.production,
+    Environment? customBaseUrl,
     bool logCall = false,
     bool logResponse = false,
     Duration timeLimit = const Duration(seconds: 275),
@@ -431,7 +439,8 @@ class CustomHttp {
 
       final response = await _client
           .post(
-            Uri.parse("${baseUrl.url}$url"),
+            Uri.parse(
+                "${customBaseUrl != null ? customBaseUrl.url : baseUrl}$url"),
             headers: headers,
             body: jsonEncode(bodyReq),
           )
@@ -523,7 +532,7 @@ class CustomHttp {
     ParserFunctionMap<T>? parserMap,
     ParserFunctionList<T>? parserList,
     LoggerFunction? logger,
-    Environment baseUrl = kDebugMode ? Environment.dev : Environment.production,
+    Environment? customBaseUrl,
     bool logCall = false,
     bool logResponse = false,
     Duration timeLimit = const Duration(seconds: 275),
@@ -543,7 +552,8 @@ class CustomHttp {
 
       final response = await _client
           .post(
-            Uri.parse("${baseUrl.url}$url"),
+            Uri.parse(
+                "${customBaseUrl != null ? customBaseUrl.url : baseUrl}$url"),
             headers: headers,
             body: jsonEncode(bodyReq),
           )

@@ -33,7 +33,7 @@ extension EnvironmentExtension on Environment {
       case Environment.production:
         return "https://carajaslabs.com.br";
       default:
-        return "";
+        return this.url;
     }
   }
 }
