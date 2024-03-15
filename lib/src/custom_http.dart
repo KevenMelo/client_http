@@ -5,29 +5,34 @@ import 'client_http_impl.dart';
 /// classe singleton para realizar às requisições http
 
 class CustomHttp {
-  CustomHttp._internal(Client client, [bool? retry, String? baseUrl])
+  CustomHttp._internal({required Client client, String? baseUrl})
       : _client = client,
         baseUrl = baseUrl ??
-            (kDebugMode ? Environment.dev.url : Environment.production.url),
-        _retry = retry ?? true;
+            (kDebugMode ? Environment.dev.url : Environment.production.url);
 
   final Client _client;
-  bool _retry = false;
 
   String baseUrl;
 
-  static final CustomHttp _instance = CustomHttp._internal(
-    ClientImpl(),
-  );
+  //  CustomHttp get _instance => CustomHttp._internal(
+  //   client: ClientImpl(),
+  // );
+  static CustomHttp _instance({Client? client, String? baseUrl}) {
+    return CustomHttp._internal(
+      client: client ?? ClientImpl(),
+      baseUrl: baseUrl,
+    );
+  }
 
   /// Construtor factory para retornar a instância da classe,
   /// podendo ser passado um client customizado,
   /// que implemente a interface [Client].
   /// Caso não seja passado um client, será usado um client http padrão.
 
-  factory CustomHttp.instance({Client? client}) {
-    return client != null ? CustomHttp._internal(client) : _instance;
-  }
+  factory CustomHttp.instance({Client? client, String? baseUrl}) => _instance(
+        client: client,
+        baseUrl: baseUrl,
+      );
 
   String? _token;
 
