@@ -329,7 +329,7 @@ class CustomHttp {
       if (logCall && logger != null) logger(url, startTime, body: bodyReq);
 
       final response = await _client
-          .post(
+          .put(
             Uri.parse(
                 "${customBaseUrl != null ? customBaseUrl.url : baseUrl}$url"),
             headers: headers,
@@ -443,7 +443,7 @@ class CustomHttp {
       if (logCall && logger != null) logger(url, startTime, body: bodyReq);
 
       final response = await _client
-          .post(
+          .patch(
             Uri.parse(
                 "${customBaseUrl != null ? customBaseUrl.url : baseUrl}$url"),
             headers: headers,
@@ -556,7 +556,7 @@ class CustomHttp {
       if (logCall && logger != null) logger(url, startTime, body: bodyReq);
 
       final response = await _client
-          .post(
+          .delete(
             Uri.parse(
                 "${customBaseUrl != null ? customBaseUrl.url : baseUrl}$url"),
             headers: headers,
