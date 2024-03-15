@@ -18,11 +18,8 @@ class CustomResponse<T> {
     ParserFunctionMap<T>? parserMap,
     ParserFunctionList<T>? parserList,
   ) {
-    assert(parserMap != null || parserList != null,
-        'You must provide a parser for the response');
-
     if (parserMap == null && parserList == null) {
-      throw Exception('Função para parsear a resposta não foi fornecida.');
+      return CustomResponse._(hasError: false, result: body);
     }
     if (body["result"] == null) {
       return CustomResponse._(hasError: false, result: body);
