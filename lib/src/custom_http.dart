@@ -154,13 +154,13 @@ class CustomHttp {
         );
       }
 
-      if (_retry) {
-        get(
-            url: url,
-            headers: headers,
-            parserMap: parserMap,
-            parserList: parserList);
-      }
+      // if (_retry) {
+      //   get(
+      //       url: url,
+      //       headers: headers,
+      //       parserMap: parserMap,
+      //       parserList: parserList);
+      // }
       return CustomResponse.error(
         description: e.toString(),
         errorCode: 500,
